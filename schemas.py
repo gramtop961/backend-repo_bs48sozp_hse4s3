@@ -14,7 +14,7 @@ Model name is converted to lowercase for the collection name:
 from pydantic import BaseModel, Field
 from typing import Optional
 
-# Example schemas (replace with your own):
+# Example schemas (you can keep or remove these if not needed):
 
 class User(BaseModel):
     """
@@ -38,11 +38,19 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# Inventory tracking schema (this powers the inventory app)
+class Item(BaseModel):
+    """
+    Inventory items schema
+    Collection name: "item"
+    """
+    name: str = Field(..., description="Item name")
+    sku: str = Field(..., description="Stock Keeping Unit")
+    category: Optional[str] = Field(None, description="Category")
+    location: Optional[str] = Field(None, description="Storage location")
+    quantity: int = Field(0, ge=0, description="On-hand quantity")
+    min_stock: Optional[int] = Field(0, ge=0, description="Reorder threshold")
+    cost: Optional[float] = Field(0.0, ge=0, description="Unit cost")
+    price: Optional[float] = Field(0.0, ge=0, description="Selling price")
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+# Add your own schemas here as needed.
